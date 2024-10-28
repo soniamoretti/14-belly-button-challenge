@@ -1,6 +1,6 @@
 
 
-// Build the metadata panel --- const { color } = require("highcharts");
+// Build the metadata panel 
 function buildMetadata(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
@@ -8,7 +8,7 @@ function buildMetadata(sample) {
     let metadata = data.metadata;
 
     // Filter the metadata for the object with the desired sample number
-    let info = metadata.filter(x => x.id.ToString() === sample) [0];
+    let info = metadata.filter(x => x.id.toString() === sample) [0];
 
     // Use d3 to select the panel with id of `#sample-metadata`
     let panel = d3.select("#sample-metadata");
