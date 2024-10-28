@@ -1,4 +1,6 @@
-// Build the metadata panel
+
+
+// Build the metadata panel --- const { color } = require("highcharts");
 function buildMetadata(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
@@ -36,26 +38,62 @@ function buildCharts(sample) {
 
     // Get the otu_ids, otu_labels, and sample_values
     let otu_ids = info.otu_ids;
-    let otu_labels = onfo.otu_labels;
+    let otu_labels = info.otu_labels;
     let sample_values = info.sample_values;
 
     // Build a Bubble Chart
+    let bubble_chart = {
+      x: otu_ids,
+      y: sample_values,
+      mode: "markers",
+      marker: {
+        color: otu_ids,
+        size: sample_values,
+        
+      }, 
+      text : otu_labels
+    };
+    let bubble_charts = [bubble_chart];
 
+    let bubble_layout = {
+      title: "Bacteria cultures per sample",
+      xaxis: {title: 'OTU ID'},
+      yaxis: {title: 'Number of bacteria' }
+    };
+    
 
     // Render the Bubble Chart
-
+    Plotly.newPlot("bubble", bubble_charts, bubble_layout);
 
     // For the Bar Chart, map the otu_ids to a list of strings for your yticks
-
+    let yticks= otu_ids.slice(0,10).map(x =>`OTU ${x}`);
 
     // Build a Bar Chart
     // Don't forget to slice and reverse the input data appropriately
+    let trace_1 = {
+      x: sample_values.slice(0, 10).reverse(),
+      y: yticks.reverse(),
+      type: "bar",
+      marker: {
+        colorscale: 'Magma',
+        color: sample_values.slice(0, 10).reverse()
+      },
+      text: otu_labels.slice(0, 10).reverse(),  // Full labels for hover text
+      orientation: "h"
+    };
+    let traces = [trace_1];
+
+    let bar_layout = {
+      title: "Top 10 Bacteria Cultures Found",
+      xaxis: {title: "Number of Bacteria"}
+    };
 
 
     // Render the Bar Chart
-
+    Plotly.newPlot("bar", traces, bar_layout);
   });
 }
+
 
 // Function to run on page load
 function init() {
